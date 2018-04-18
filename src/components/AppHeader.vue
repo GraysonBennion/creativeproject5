@@ -7,7 +7,7 @@
       <li class="right" v-if="loggedIn">{{user.username}}</li>
       <form v-else class="right" v-on:submit.prevent="login">
         <input v-model="email" placeholder="Email Address">
-        <input v-model="password" placeholder="Password">
+        <input type="password" v-model="password" placeholder="Password">
         <button class="primary" type="submit">Login</button>
       </form>
     </ul>

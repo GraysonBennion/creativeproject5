@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('decks', function(table) {
       table.increments('id').primary();
       table.string('title');
-      table.dateTime('cards');
+      table.string('cards');
       table.integer('user_id').unsigned().notNullable().references('id').inTable('users');
     }),
   ]);

@@ -12,6 +12,7 @@ export default new Vuex.Store({
     loginError: '',
     registerError: '',
     feed: [],
+    title: '',
   },
 
   getters: {
@@ -95,13 +96,22 @@ export default new Vuex.Store({
     },
 
     //Add a deck
-    addDeck(context,title,cards) {
-      axios.post("/api/users/" + context.state.user.id + "/decks",title,cards).then(response => {
-		return context.dispatch('getFeed');
+    addDeck(context, data) {
+      axios.post("/api/users/" + context.state.user.id + "/decks", data).then(response => {
+		return;
       }).catch(err => {
 		console.log("addDeck failed:",err);
       });
     },
 
+    //Delete a deck
+    deleteDeck(context, data) {
+      axios.delete("/api/users/" + context.state.user.id + "/delete/" + data.id)
+      .then(response => {
+        return;
+      }).catch(error => {
+        console.log("deleteDeck failed:", error);
+      });
+    },
   }
 });

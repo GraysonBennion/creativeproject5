@@ -81,8 +81,7 @@ app.get('/api/users/:id/decks', (req, res) => {
   let id = parseInt(req.params.id);
   knex('users').join('decks','users.id','decks.user_id')
     .where('users.id',id)
-    .orderBy('title','desc')
-    .select('title','username','name').then(decks => {
+    .orderBy('title','desc').then(decks => {
       res.status(200).json({decks:decks});
     }).catch(error => {
       res.status(500).json({ error });
@@ -93,14 +92,28 @@ app.get('/api/users/:id/decks', (req, res) => {
 app.post('/api/users/:id/decks', (req, res) => {
   let id = parseInt(req.params.id);
   knex('users').where('id',id).first().then(user => {
-    return knex('decks').insert({user_id: id, title:req.body.title, cards:req.body.cards});
+    return knex('decks').insert({user_id: id, title:req.body.title});
   }).then(ids => {
     return knex('decks').where('id',ids[0]).first();
-  }).then(tweet => {
+  }).then(decks => {
     res.status(200).json({decks:decks});
     return;
   }).catch(error => {
     console.log(error);
     res.status(500).json({ error });
   });
+});
+
+//Endpoint for removing a deck
+app.delete('/api/users/:id/delete/:deckid', (req, res) => {
+  let id = parseInt(req.params.id);
+  let deckid = parseInt(req.params.deckid);
+  knex('decks').where({'user_id':id,'id':deckid}).first().del()
+  .then(ids => {
+    res.sendStatus(200);
+  })
+  .catch(error => {
+    console.log(error);
+    res.status(500).json({error});
+  });  
 });
